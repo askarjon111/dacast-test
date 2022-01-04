@@ -6,7 +6,7 @@ UPLOAD_TYPES = [
     ('curl', 'curl'),
 ]
 
-class Video(models.Manager):
+class Video(models.Model):
     source = models.CharField(max_length=250, blank=True, null=True)
     file = models.FileField()
     upload_type = models.CharField(max_length=4, choices=UPLOAD_TYPES, default='ajax')

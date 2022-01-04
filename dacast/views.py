@@ -1,7 +1,7 @@
 from django.http.response import HttpResponse
+from rest_framework.response import Response
 from rest_framework.decorators import api_view
 import requests
-from dacast.models import Video
 from dacast.serializers import VideoSerializer
 
 
@@ -13,7 +13,10 @@ def uploadVideo(request):
         if serializer.is_valid():
             serializer.save()
             url = ('https://upload.dacast.com')
-            requests.post(url, token, serializer.data)
+            res = requests.post(url, token, serializer.data)
+            print(res.json())
+        else:
+            return Response(serializer.errors)
     
-    return HttpResponse(request, url, {'form': serializer.data})
+    return Response("dnoe")
         
