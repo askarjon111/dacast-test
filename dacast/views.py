@@ -5,24 +5,47 @@ import requests
 from dacast.serializers import VideoSerializer
 
 
+# @api_view(['GET', 'POST'])
+# def uploadVideo(request):
+#     if request.method == "POST":
+#         serializer = VideoSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             url = ('https://upload.dacast.com/v2/vod')
+#             headers = {'X-Api-Key': "to1641301942hzIX4LKsvBFgHn32Ms0TuAPk1JeWBAxvken"}
+#             res = requests.post(url, data={
+#                 'source': 'test.mp4',
+#                 'upload_type': 'ajax',
+#             },
+#             headers=headers)
+#             print(res)
+#         else:
+#             return Response(serializer.errors.json())
+    
+#     return Response("dnoe")
+        
+
 @api_view(['GET', 'POST'])
-def uploadVideo(request):
+def getToken(request):
+    apikey = "to1641301942hzIX4LKsvBFgHn32Ms0TuAPk1JeWBAxvken"
+    tokenUrl = "https://developer.dacast.com/?apikey=" + apikey
+    callbackUrl = 'https://127.0.0.1:8000'
+    uploadUrl = "https://upload.dacast.com"
     if request.method == "POST":
+        print("getting token")
+        
         serializer = VideoSerializer(data=request.data)
-        token = "1641301942hzIX4LKsvBFgHn32Ms0TuAPk1JeWBAxv"
         if serializer.is_valid():
-            file = serializer.validated_data['file']
-            serializer.save()
-            url = ('https://upload.dacast.com/vod')
-            headers = {'token': token}
-            res = requests.post(url, data={
-                'source': 'test.mp4',
+            FormData = {
+                'apikey'
+                'source': serializer.data['file'],
+                'callbackUrl': callbackUrl,
                 'upload_type': 'ajax',
-            },
-            headers=headers)
+            }
+            resTok = requests.post(tokenUrl)
+            res = requests.post(uploadUrl, FormData, headers=resTok)
             print(res)
         else:
             return Response(serializer.errors.json())
-    
+
     return Response("dnoe")
-        

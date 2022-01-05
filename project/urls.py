@@ -5,5 +5,5 @@ from dacast import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.uploadVideo)
+    path('', views.getToken)
 ]
