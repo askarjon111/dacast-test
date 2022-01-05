@@ -13,14 +13,14 @@ def uploadVideo(request):
         if serializer.is_valid():
             file = serializer.validated_data['file']
             serializer.save()
-            url = ('https://upload.dacast.com')
+            url = ('https://upload.dacast.com/vod')
+            headers = {'token': token}
             res = requests.post(url, data={
                 'source': 'test.mp4',
                 'upload_type': 'ajax',
-                
-                'token': token,
-            })
-            # print(res.json())
+            },
+            headers=headers)
+            print(res)
         else:
             return Response(serializer.errors.json())
     
