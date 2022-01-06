@@ -1,4 +1,5 @@
-from django.forms.models import model_to_dict
+import base64
+from urllib.request import urlopen
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 import requests
@@ -16,15 +17,15 @@ def getToken(request):
         serializer = VideoSerializer(data=request.data)
         if serializer.is_valid():
             data = {
-                "source": serializer.validated_data['file'],
+                "source": base64.b64encode(serializer.validated_data['file']).read(),
                 "upload_type": "ajax",
             }
             headers = {
                 "X-Api-Key": apikey,
             }
-            resTok = requests.post(tokenUrl, headers=headers, data=data)
+            resTok = requests.post(tokenUrl, headers=headers, json=json.dumps(data))
             print(data)
-            print("token: ", resTok)
+            print("token: ", resTok.status_code)
             res = requests.post(
                 uploadUrl, data, headers=resTok)
             print("upload: ", res)
